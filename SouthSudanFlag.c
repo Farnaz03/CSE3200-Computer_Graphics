@@ -20,7 +20,7 @@ void doDisplay() {
 	/* Clear the screen with the clearcolor */
 	glClear(GL_COLOR_BUFFER_BIT);
     
-    //Set state to Green
+    //Set rectangle to Green
     glColor3f(0.,0.4,0.0);
     
 		GLfloat p1[3] = {0,34,0}; 
@@ -34,13 +34,13 @@ void doDisplay() {
 		glVertex3fv(p4); 
 	glEnd();
 	
-	//Set state to white line
+	//Set rectangle to White
     glColor3f(1.0,1.0,1.0);
-    
+
 		GLfloat p5[3] = {0,40,0}; 
 		GLfloat p6[3] = {228,40,0}; 
 		GLfloat p7[3] = {228,34,0}; 
-		GLfloat p8[3] = {0,34,0};
+		GLfloat p8[3] = {0,34,0};	
 	glBegin(GL_POLYGON); 
 		glVertex3fv(p5); 
 		glVertex3fv(p6); 
@@ -48,7 +48,7 @@ void doDisplay() {
 		glVertex3fv(p8); 
 	glEnd();
 	
-	//Set state to Red
+	//Set rectangle to Red
     glColor3f(1.0,0.0,0.0);
     
 		GLfloat p9[3] = {0,74,0}; 
@@ -62,7 +62,7 @@ void doDisplay() {
 		glVertex3fv(p12); 
 	glEnd();
 	
-	//Set state to white line
+	//Set rectangle to White
     glColor3f(1.0,1.0,1.0);
     
 		GLfloat p13[3] = {0,80,0}; 
@@ -76,7 +76,7 @@ void doDisplay() {
 		glVertex3fv(p16); 
 	glEnd();
 	
-	//Set state to black
+	//Set rectangle to Black
     glColor3f(0.0,0.0,0.0);
     
 		GLfloat p17[3] = {0,114,0}; 
@@ -93,7 +93,7 @@ void doDisplay() {
 	//Triangle
 	glBegin(GL_POLYGON); 
 	float triangleheight = sqrt((myheight*myheight) - ((myheight/2)*(myheight/2)));
-		glColor3f(0.0, 0.0, 1.0);   // blue 
+		glColor3f(0.0, 0.0, 0.5);   // blue 
 		glVertex3f(0.0, myheight, 0.0); 
 		glVertex3f(triangleheight, myheight/2, 0.0); 
 		glVertex3f(0.0, 0.0, 0.0); 
@@ -131,6 +131,7 @@ void doDisplay() {
 	
 
 	glBegin(GL_TRIANGLES); 
+		glColor3f(0.9,0.87,0.04);
 		glVertex2f(x_distance_to_center_of_star + outer_radius_of_pentagon, (myheight / 2));
 		glVertex2f(x_distance_to_center_of_star + outer_radius_of_pentagon + y, (myheight / 2) + x);
 		glVertex2f(x_distance_to_center_of_star - inner_radius_of_pentagon, (myheight / 2) + (side_of_pentagon / 2));	
@@ -144,7 +145,7 @@ int main(int argc, char *argv[]) {
 	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
 	glutInitWindowSize(mywidth*2,myheight*2);
 	glutInitWindowPosition(300,100);
-	glutCreateWindow("CSE3200: Simple Line : A Team)");
+	glutCreateWindow("CSE3200: Flag of South Sudan by A Team");
 	doInit();
 	glutDisplayFunc(doDisplay);
 	glutMainLoop();

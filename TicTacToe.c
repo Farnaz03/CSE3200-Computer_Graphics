@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
 	glutInitWindowSize(480,480);
 	glutInitWindowPosition(300,100);
-	glutCreateWindow("CSE3200: Simple Line : Farnaz Baksh)");
+	glutCreateWindow("CSE3200: TicTacToe by A Team");
 	doInit();
 	glutDisplayFunc(doDisplay);
 	glutMainLoop();
