@@ -99,7 +99,7 @@ void doDisplay() {
 		glVertex3f(0.0, 0.0, 0.0); 
 	glEnd();
 
-	//Star
+	//Star --- (Received help from 'Power Thinkers' group)
 	double thirty_degrees = 30 * (M_PI / 180);
 	double eighteen_degrees = 18 * (M_PI / 180);
 	double thirty_six_degrees = 36 * (M_PI / 180);
@@ -119,19 +119,11 @@ void doDisplay() {
 		glVertex2f(x_distance_to_center_of_star + outer_radius_of_pentagon, (myheight / 2));
 		glVertex2f(x_distance_to_center_of_star - inner_radius_of_pentagon, (myheight / 2) - (side_of_star + (side_of_pentagon / 2))); 
 		glVertex2f(x_distance_to_center_of_star - inner_radius_of_pentagon, (myheight / 2) + (side_of_star + (side_of_pentagon / 2)));	
-	glEnd();
 
-
-	glBegin(GL_TRIANGLES); 
-		glColor3f(0.9,0.87,0.04);
 		glVertex2f(x_distance_to_center_of_star - radius, (myheight / 2));
 		glVertex2f(x_distance_to_center_of_star + outer_radius_of_pentagon + y, (myheight / 2) - x);
 		glVertex2f((x_distance_to_center_of_star - radius) + (20 * cos(eighteen_degrees)), (myheight / 2) + (20 * sin(eighteen_degrees)));
-	glEnd();
-	
 
-	glBegin(GL_TRIANGLES); 
-		glColor3f(0.9,0.87,0.04);
 		glVertex2f(x_distance_to_center_of_star + outer_radius_of_pentagon, (myheight / 2));
 		glVertex2f(x_distance_to_center_of_star + outer_radius_of_pentagon + y, (myheight / 2) + x);
 		glVertex2f(x_distance_to_center_of_star - inner_radius_of_pentagon, (myheight / 2) + (side_of_pentagon / 2));	

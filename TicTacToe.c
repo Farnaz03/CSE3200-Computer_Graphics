@@ -16,31 +16,24 @@ void doDisplay() {
 	/* Clear the screen with the clearcolor */
 	glClear(GL_COLOR_BUFFER_BIT);
     
-    //Set state to Red for Horizintal Lines
-    glColor3f(1.0,0.0,0.0);
-    
-    //Setting the line parameters... 
-    //horizontal lines
-	glBegin(GL_LINES);          
+    //Horizontal Lines
+	glBegin(GL_LINES);  
+    glColor3f(1.0,0.0,0.0);	//Set state to Red for Horizintal Lines
 		glVertex3f(3,6,0);
 		glVertex3f(12,6,0);
-	glEnd();
-	
-	glBegin(GL_LINES);          
+       
 		glVertex3f(3,9,0);
 		glVertex3f(12,9,0);
 	glEnd();
 
-    //Set state to yellow for vertical Line
-    glColor3f(1.0,1.0,0.0);
+
     
-	//vertical lines
-	glBegin(GL_LINES);          
+	//Vertical Lines
+	glBegin(GL_LINES);  
+    glColor3f(1.0,1.0,0.0); //Set state to Yellow for Vertical Line     
 		glVertex3f(6,3,0);
 		glVertex3f(6,12,0);
-	glEnd();
-	
-	glBegin(GL_LINES);          
+       
 		glVertex3f(9,3,0);
 		glVertex3f(9,12,0);
 	glEnd();
