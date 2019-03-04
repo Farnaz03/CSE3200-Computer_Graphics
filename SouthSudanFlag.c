@@ -128,7 +128,7 @@ void doDisplay() {
 		glVertex2f(x_distance_to_center_of_star + outer_radius_of_pentagon + y, (myheight / 2) + x);
 		glVertex2f(x_distance_to_center_of_star - inner_radius_of_pentagon, (myheight / 2) + (side_of_pentagon / 2));	
 	glEnd();
-	
+
 	glFlush();
 }
 
