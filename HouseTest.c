@@ -154,7 +154,7 @@ void display(void)
  	glDrawArrays(GL_QUADS, 0, 24);
  glPopMatrix();
  
- 	//Ceiling
+ /*	//Ceiling
  glPushMatrix();
  glColor3f(0.5, 0.2, 0.0);
  glTranslatef(0.0, 6.0, 0.0);
@@ -162,7 +162,7 @@ void display(void)
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
  	glDrawArrays(GL_QUADS, 0, 24);
- glPopMatrix();
+ glPopMatrix(); */
  
 	//left Roof
  glPushMatrix();
