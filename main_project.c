@@ -253,6 +253,49 @@ void display(void)
  myquad();
  glPopMatrix();
  
+ //Right Side - Upper Wall 
+ glPushMatrix();
+ glRotatef(90,0.0,1.0,0.0);
+ glTranslatef(0.0,6.0,14.9);
+ glScalef(8.0,5.5,0.0);
+ glColor3f(1.0,1.0,1.0);
+ myquad();
+ glPopMatrix(); 
+ 
+ //Right Side - Lower Wall
+ glPushMatrix();
+ glRotatef(90,0.0,1.0,0.0);
+ glTranslatef(0.5,-2.0,14.9);
+ glScalef(7.5,3.0,0.0);
+ glColor3f(1.0,1.0,1.0);
+ myquad();
+ glPopMatrix(); 
+ 
+ //Left Side Wall
+ glPushMatrix();
+ glRotatef(90,0.0,1.0,0.0);
+ glTranslatef(0.0,4.0,-14.9);
+ glScalef(8.0,9.0,0.0);
+ glColor3f(1.0,0.5,0.0);
+ myquad();
+ glPopMatrix(); 
+ 
+ //Back brown wall  
+ glPushMatrix();
+ glTranslatef(-4.9,4.0,-8.0);
+ glScalef(10.0,9.0,0.0);
+ glColor3f(1.0,0.5,0.0);
+ myquad();
+ glPopMatrix();
+ 
+ //Back glass wall
+ glPushMatrix();
+ glTranslatef(10.0,3.2,-8.0);
+ glScalef(5.0,8.2,0.0);
+ glColor3f(1.0,1.0,1.0);
+ myquad();
+ glPopMatrix();
+ 
  glutSwapBuffers();    //instead of using GLflush you're swapping buffers
 }
 
