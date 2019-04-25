@@ -2,11 +2,14 @@
 // A-Team Project --- UG Innovation Center
 // University of Guyana
 // Department of Computer Science
-// 
 ///////////////////////////////////////////////////////////////////////////////
 	
-
+#include <stdio.h>
 #include <GL/glut.h>
+#include <math.h>
+#include <stdarg.h>
+//#include "robotgallery.h"
+
 static int x_rotation = 0, y_rotation = 0,  z_rotation = 0;
 // vertex coords array
 static GLfloat theta[] = {0.0,0.0,0.0};
@@ -53,13 +56,18 @@ void drawLines(){
 	
 
 void myquad(){
-	
+	//implement scale function
 	glBegin(GL_QUADS);
 	glVertex3f(-1.0,1.0,0.0);
 	glVertex3f(1.0,1.0,0.0);
 	glVertex3f(1.0,-1.0,0.0);
 	glVertex3f(-1.0,-1.0,0.0);
 	glEnd();
+}
+
+void optimizedquad(float x, float y, float z){
+	glScalef(x, y, z);
+	myquad();
 }
 
 
@@ -69,7 +77,7 @@ void init(void)
  glShadeModel (GL_FLAT);
  glEnable (GL_DEPTH_TEST);  //turn on depth(z-axis) buffer
 }
-/*
+
 void spinObj() {
 	theta[axis] +=0.05;
 	if(theta[axis] > 360.0) theta[axis] -= 360.0;
@@ -95,20 +103,38 @@ void keyboard (unsigned char key, int x, int y)
     default:
     break;
     }
-} */
+}
+
+//Text output Method 
+void show_label(GLfloat x, GLfloat y, char *format,...)
+{
+  va_list args;
+  char buffer[200], *p;
+
+  va_start(args, format);
+  vsprintf(buffer, format, args);
+  va_end(args);
+  glPushMatrix();
+  glTranslatef(x, y, 0);
+  glScalef(0.006, 0.006, 0.006);
+  for (p = buffer; *p; p++)
+    glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, *p);
+  glPopMatrix();
+}
 
 void display(void)
 {
  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
- glRotatef((GLfloat) x_rotation, 1, 0 ,0);
+ /*glRotatef((GLfloat) x_rotation, 1, 0 ,0);
  glRotatef((GLfloat) y_rotation, 0, 1 ,0);
- glRotatef((GLfloat) z_rotation, 0, 0 ,1); 
- /*	glLoadIdentity();
- 	gluLookAt(30,30,30,0,0,0,0,1,0);
+ glRotatef((GLfloat) z_rotation, 0, 0 ,1); */
+ 	glLoadIdentity();
+ 	gluLookAt(20,20,20,0,0,0,0,1,0);
+ 	
  	glRotatef(theta[0], 1.0, 0.0, 0.0);
  	glRotatef(theta[1], 0.0, 1.0, 0.0);
  	glRotatef(theta[2], 0.0, 0.0, 1.0);
-    // enble and specify pointers to vertex arrays
+   /* // enble and specify pointers to vertex arrays
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_VERTEX_ARRAY);
     glColorPointer(3, GL_FLOAT, 0, colors);
@@ -124,7 +150,7 @@ void display(void)
  glPushMatrix();
  glRotatef(90,1.0,0.0,0.0);
  glTranslatef(0.0,0.0,5.0);
- glScalef(15.0,10.0,0.0);
+ glScalef(18.0,10.0,0.0);
  glColor3f(0.0,0.7,0.0);
  myquad();
  glPopMatrix();
@@ -152,121 +178,112 @@ void display(void)
  glColor3f(1.0,1.0,1.0);
  myquad();
  glPopMatrix(); 
-	 
+ 
 //Bottom front glass wall
  glPushMatrix();
  glTranslatef(8.0,-2.0,7.0);
- glScalef(7.0,3.0,0.0);
  glColor3f(1.0,1.0,1.0);
- myquad();
- glPopMatrix();
+ optimizedquad(7.0,3.0,0.0);
+ glPopMatrix(); 
  
 //Door
  glPushMatrix();
  glTranslatef(-1.7,-2.0,7.0);
- glScalef(2.7,3.0,0.0);
  glColor3f(0.6,0.3,0.17);
- myquad();
- glPopMatrix();
+ optimizedquad(2.7,3.0,0.0);
+ glPopMatrix();  
  
 //Columns Posts
  glPushMatrix();
  glTranslatef(4.0,-2.0,8.2);
- glScalef(0.3,3.0,0.0);
  glColor3f(0.6,0.3,0.17);
- myquad();
- glPopMatrix();
+ optimizedquad(0.3,3.0,0.0);
+ glPopMatrix(); 
  
  glPushMatrix();
  glTranslatef(13.0,-2.3,8.2);
- glScalef(0.3,2.7,0.0);
  glColor3f(0.6,0.3,0.17);
- myquad();
- glPopMatrix();
-	 
-//Window Lines for front walls
+ optimizedquad(0.3,2.7,0.0);
+ glPopMatrix(); 
  
+//Window Lines for front walls
 //Vertical Bottom glass wall lines
  glPushMatrix();
  glTranslatef(8.0,-2.0,7.1);
- glScalef(0.1,3.0,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,3.0,0.0);
  glPopMatrix();
  
  glPushMatrix();
  glTranslatef(12.0,-2.0,7.1);
- glScalef(0.1,3.0,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,3.0,0.0);
  glPopMatrix();
  
 //Horizontal Bottom glass wall lines
  glPushMatrix();
  glTranslatef(8.0,-1.0,7.1);
- glScalef(7.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(7.0,0.1,0.0);
  glPopMatrix();
  
  glPushMatrix();
  glTranslatef(8.0,-3.0,7.1);
- glScalef(7.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(7.0,0.1,0.0);
  glPopMatrix();
 	 
 //Vertical upper glass wall lines
  glPushMatrix();
  glTranslatef(10.0,6.0,8.1);
- glScalef(0.1,5.5,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,5.5,0.0);
  glPopMatrix();
 	 
  glPushMatrix();
  glTranslatef(5.0,6.0,8.1);
- glScalef(0.1,5.5,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,5.5,0.0);
  glPopMatrix();
 	 
  glPushMatrix();
  glTranslatef(14.0,6.0,8.1);
- glScalef(0.1,5.5,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,5.5,0.0);
  glPopMatrix();
 	 
 //Horizontal upper glass wall lines
  glPushMatrix();
  glTranslatef(10.0,2.5,8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
 	 
  glPushMatrix();
  glTranslatef(10.0,5.0,8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
 	 
  glPushMatrix();
  glTranslatef(10.0,7.5,8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
 	 
  glPushMatrix();
  glTranslatef(10.0,10.0,8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
 
+ 
+ glPushMatrix();
+ glTranslatef(10.0,0.5,8.1);
+ glColor3f(0.0,0.0,0.0);
+ optimizedquad(5.0,0.1,0.0);
+ glPopMatrix();  
+ 
  /*
  glPushMatrix();
  glTranslatef(10.0,0.5,8.1);
@@ -279,37 +296,33 @@ void display(void)
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(-7.0,-2.0,-4.3);
- glScalef(1.0,3.0,3.0);
  glColor3f(1.0,0.6,0.0);
- myquad();
+ optimizedquad(1.0,3.0,0.0);
  glPopMatrix();
  
 //Inner ceiling for door and brown front
  glPushMatrix();
  glRotatef(90,1.0,0.0,0.0);
  glTranslatef(0,7.0,-1.0);
- glScalef(5.0,1.0,0.0);
  glColor3f(1.0,0.65,0.0);
- myquad();
+ optimizedquad(5.0,1.0,0.0);
  glPopMatrix();
  
 //Inner ceiling for front glass
  glPushMatrix();
  glRotatef(90,1.0,0.0,0.0);
  glTranslatef(10,7.1,-0.5);
- glScalef(4.92,1.0,0.0);
  glColor3f(0.9,0.9,0.9);
-//glColor3f(0.9,0.0,0.9);
- myquad();
+ optimizedquad(4.92,1.0,0.0);
  glPopMatrix();
 	 
 //Right Side - Upper Wall 
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(0.0,6.0,14.9);
- glScalef(8.0,5.5,0.0);
+ //glScalef(8.0,5.5,0.0);
  glColor3f(1.0,1.0,1.0);
- myquad();
+ optimizedquad(8.0,5.5,0.0);
  glPopMatrix(); 
  
 //Window Lines for Right Side - Upper glass wall
@@ -317,75 +330,66 @@ void display(void)
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(0.0,10.0,15.0);
- glScalef(8.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(8.0,0.1,0.0);
  glPopMatrix();
 
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(0.0,7.5,15.0);
- glScalef(8.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(8.0,0.1,0.0);
  glPopMatrix();
  
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(0.0,5.0,15.0);
- glScalef(8.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
- glPopMatrix();
+ optimizedquad(8.0,0.1,0.0);
+ glPopMatrix(); 
  
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(0.0,2.5,15.0);
- glScalef(8.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
- glPopMatrix();
+ optimizedquad(8.0,0.1,0.0);
+ glPopMatrix(); 
  
  //Vertical windows lines - Right side glass wall
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(-7.0,3.2,15.0);
- glScalef(0.1,8.2,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
- glPopMatrix();
+ optimizedquad(0.1,8.2,0.0);
+ glPopMatrix(); 
  
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(-3.0,3.2,15.0);
- glScalef(0.1,8.2,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,8.2,0.0);
  glPopMatrix();
 
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(2.0,3.2,15.0);
- glScalef(0.1,8.2,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,8.2,0.0);
  glPopMatrix();
  
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(7.0,3.2,15.0);
- glScalef(0.1,8.2,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,8.2,0.0);
  glPopMatrix();
  
 //Right Side - Lower Wall
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(0.5,-2.0,14.9);
- glScalef(7.5,3.0,0.0);
  glColor3f(1.0,1.0,1.0);
- myquad();
+ optimizedquad(7.5,3.0,0.0);
  glPopMatrix(); 
  
  //Window Lines for Right Side - Lower glass wall
@@ -393,136 +397,130 @@ void display(void)
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(0.5,0.0,15.0);
- glScalef(7.5,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(7.5,0.1,0.0);
  glPopMatrix();
  
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(0.5,-2.5,15.0);
- glScalef(7.5,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(7.5,0.1,0.0);
  glPopMatrix();
+ 
  
 //Left Side Wall
  glPushMatrix();
  glRotatef(90,0.0,1.0,0.0);
  glTranslatef(0.0,4.0,-14.9);
- glScalef(8.0,9.0,0.0);
  glColor3f(1.0,0.5,0.0);
- myquad();
+ optimizedquad(8.0,9.0,0.0);
  glPopMatrix(); 
  
 //Back brown wall  
  glPushMatrix();
  glTranslatef(-4.9,4.0,-8.0);
- glScalef(10.0,9.0,0.0);
  glColor3f(1.0,0.5,0.0);
- myquad();
+ optimizedquad(10.0,9.0,0.0);
  glPopMatrix();
 	 
 //Back glass wall
  glPushMatrix();
- glTranslatef(10.0,3.2,-8.0);
- glScalef(5.0,8.3,0.0);
+ glTranslatef(10.0,3.3,-8.0);
  glColor3f(1.0,1.0,1.0);
- myquad();
+ optimizedquad(5.0,8.2,0.0);
  glPopMatrix();
  
 //Window Lines for back glass walls
+
 //Vertical upper glass wall lines
  glPushMatrix();
  glTranslatef(10.0,3.2,-8.1);
- glScalef(0.1,8.2,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,8.2,0.0);
  glPopMatrix();
  
  glPushMatrix();
  glTranslatef(5.0,3.2,-8.1);
- glScalef(0.1,8.2,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,8.2,0.0);
  glPopMatrix();
 	 
  glPushMatrix();
  glTranslatef(14.0,3.2,-8.1);
- glScalef(0.1,8.2,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(0.1,8.2,0.0);
  glPopMatrix();
+ 
  
  //Horizontal upper glass wall lines
  glPushMatrix();
  glTranslatef(10.0,-2.5,-8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
  
  glPushMatrix();
  glTranslatef(10.0,0.0,-8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
  
+ //Horizontal upper glass wall lines
  glPushMatrix();
  glTranslatef(10.0,2.5,-8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
 	 
  glPushMatrix();
  glTranslatef(10.0,5.0,-8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
 	 
  glPushMatrix();
  glTranslatef(10.0,7.5,-8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
 	 
  glPushMatrix();
  glTranslatef(10.0,10.0,-8.1);
- glScalef(5.0,0.1,0.0);
  glColor3f(0.0,0.0,0.0);
- myquad();
+ optimizedquad(5.0,0.1,0.0);
  glPopMatrix();
+
 
  //Top glass roof
  glPushMatrix();
- 
  glRotatef(90,1.0,0.0,0.0);
  glTranslatef(10.0,0.0,-11.5);
- glScalef(5.0,8.0,0.0);
  glColor3f(1.0,1.0,1.0);
- myquad();
+ optimizedquad(5.0,8.0,0.0);
  glPopMatrix();
 
  //Top Concrete roof
  glPushMatrix();
  glRotatef(90,1.0,0.0,0.0);
  glTranslatef(-5.0,0.0,-11.5);
- glScalef(9.9,8.0,0.0);
  glColor3f(0.9,0.5,0.0);
- myquad();
+ optimizedquad(9.9,8.0,0.0);
  glPopMatrix();
  
+ 
+ //Label
  glPushMatrix();
- glTranslatef(-5.0,15.0,-12.0);
- glScalef(0.1,1.0,0.0);
- glColor3f(0.5,0.5,0.5);
- myquad();
- glPopMatrix();
+ glColor3f(0, 0, 0);
+ glTranslatef(-4.9,7.0,8.1);   
+ show_label(-5, 0, "UG Innovation Center");    
+ glPopMatrix(); 
  
+ /*
+ glPushMatrix();
+ room();
+ glPopMatrix();
+ */
  glutSwapBuffers();    //instead of using GLflush you're swapping buffers
 }
 	
@@ -539,33 +537,6 @@ void reshape(int w, int h)
                                       //marks where up is, in this case y is where up is, usually the y.
 }
 
-void keyboard (unsigned char key, int x, int y)
-{
-    switch (key) 
-     {
-    case 'x':
-    x_rotation = 15;
-    y_rotation = 0;
-    z_rotation = 0;
-    glutPostRedisplay();
-    break;
-    case 'y':
-    y_rotation = 15;
-    x_rotation = 0;
-    z_rotation = 0;
-    glutPostRedisplay();
-    break;
-    case 'z':
-    z_rotation = 15;
-    y_rotation = 0;
-    x_rotation = 0;
-    glutPostRedisplay();
-    break;
-    default:
-    break;
-    }
-}
-
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
@@ -577,7 +548,7 @@ int main(int argc, char** argv)
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
-    //glutIdleFunc(spinObj);
+    glutIdleFunc(spinObj);
     glutMainLoop();
     return 0;
 }
