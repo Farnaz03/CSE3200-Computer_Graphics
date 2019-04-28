@@ -1,0 +1,28 @@
+Plan for increment 2 presentation
+
+1.Checklist of things to implement
+   - Fake Shadow				yes
+   - Building completion			yes
+	#added back door
+	#frame completion of roof
+	#trees
+
+    - Animation					yes (in parts-different files)
+	#Zoom function
+	#Auto rotate
+
+    - optimize quad function(adding scale) 	yes
+    - enter room by keyboard click		yes
+    - name on building				yes
+    
+
+    - texturing					No
+    - Surface Normals				No
+    - Map relativity				No (awaiting map from group) 
+	#trying to implement by building other buildings
+
+2. Resources necessary
+	- file with zoom
+	- file with rotation
+
+
