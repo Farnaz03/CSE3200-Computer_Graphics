@@ -11,7 +11,7 @@
 #include <GL/glut.h>
 #include <math.h>
 #include <stdarg.h>
-#include "robotgallery.h"
+//#include "robotgallery.h"
 
 static int x_rotation = 0, y_rotation = 0,  z_rotation = 0;
 static GLfloat theta[] = {0.0,0.0,0.0};
