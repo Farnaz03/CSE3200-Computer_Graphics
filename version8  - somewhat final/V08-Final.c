@@ -627,8 +627,8 @@ void room() {
 //Floor
  glPushMatrix();
  glRotatef(90,1.0,0.0,0.0);
- glTranslatef(0.0,0.0,1.0);
- glScalef(5.0,3.0,0.0);
+ glTranslatef(0.0,0.0,4.9);
+ glScalef(10.0,3.0,0.0);
  glColor3f(0.3,0.1,0.1);
  myquad();
  glPopMatrix();

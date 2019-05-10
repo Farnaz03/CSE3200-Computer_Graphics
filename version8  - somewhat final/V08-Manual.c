@@ -10,8 +10,12 @@
 #include <stdio.h>
 #include <GL/glut.h>
 #include <math.h>
+#include <gl\gl.h>
+#include <gl\glu.h>
 #include <stdarg.h>
 #include "robotgallery.c"
+
+GLuint texture[2];
 
 static int x_rotation = 0, y_rotation = 0,  z_rotation = 0;
 static GLfloat theta[] = {0.0,0.0,0.0};
@@ -23,6 +27,19 @@ float r=1.0,g=0.0,bl=0.0,a=0,b=0;
 float x=0.0f,y=1.75f,z=5.0f;
 float lx=0.0f,ly=0.0f,lz=-1.0f;
 float ratio=1.0;
+
+struct Image {
+    unsigned long sizeX;
+    unsigned long sizeY;
+    char *data;
+};
+
+typedef struct Image Image;
+#define checkImageWidth 64
+#define checkImageHeight 64
+
+GLubyte checkImage[checkImageWidth][checkImageHeight][3];
+
 
 GLfloat vertices[] = {1,1,1,  -1,1,1,  -1,-1,1,  1,-1,1,        // v0-v1-v2-v3
                       1,1,1,  1,-1,1,  1,-1,-1,  1,1,-1,        // v0-v3-v4-v5
@@ -70,11 +87,121 @@ void myquad(){
 	glEnd();
 }
 
+
 void optimizedquad(float x, float y, float z){
 	glScalef(x, y, z);
 	myquad();
 }
 
+
+void mytexturequad(){
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0);	glVertex3f(-1.0,1.0,0.0);
+	glTexCoord2f(1.0, 0.0); glVertex3f(1.0,1.0,0.0);
+	glTexCoord2f(1.0, 1.0); glVertex3f(1.0,-1.0,0.0);
+	glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,-1.0,0.0);
+	//glScalef(x, y, z);
+	
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+void makeCheckImage(void){
+    int i, j, c;
+    for (i = 0; i < checkImageWidth; i++) {
+        for (j = 0; j < checkImageHeight; j++) {
+            c = ((((i&0x8)==0)^((j&0x8)==0)))*255;
+            checkImage[i][j][0] = (GLubyte) c;
+            checkImage[i][j][1] = (GLubyte) c;
+            checkImage[i][j][2] = (GLubyte) c;
+        }
+    }
+}
+
+int ImageLoad(char *filename, Image *image) {
+    FILE *file;
+    unsigned long size; // size of the image in bytes.
+    unsigned long i; // standard counter.
+    unsigned short int planes; // number of planes in image (must be 1)
+    unsigned short int bpp; // number of bits per pixel (must be 24)
+    char temp; // temporary color storage for bgr-rgb conversion.
+    // make sure the file is there.
+    if ((file = fopen(filename, "rb"))==NULL){
+        printf("File Not Found : %s\n",filename);
+        return 0;
+    }
+    // seek through the bmp header, up to the width/height:
+    fseek(file, 18, SEEK_CUR);
+    // read the width
+    if ((i = fread(&image->sizeX, 4, 1, file)) != 1) {
+        printf("Error reading width from %s.\n", filename);
+        return 0;
+    }
+    //printf("Width of %s: %lu\n", filename, image->sizeX);
+    // read the height
+    if ((i = fread(&image->sizeY, 4, 1, file)) != 1) {
+        printf("Error reading height from %s.\n", filename);
+        return 0;
+    }
+    //printf("Height of %s: %lu\n", filename, image->sizeY);
+    // calculate the size (assuming 24 bits or 3 bytes per pixel).
+    size = image->sizeX * image->sizeY * 3;
+    // read the planes
+    if ((fread(&planes, 2, 1, file)) != 1) {
+        printf("Error reading planes from %s.\n", filename);
+        return 0;
+    }
+    if (planes != 1) {
+        printf("Planes from %s is not 1: %u\n", filename, planes);
+        return 0;
+    }
+    // read the bitsperpixel
+    if ((i = fread(&bpp, 2, 1, file)) != 1) {
+        printf("Error reading bpp from %s.\n", filename);
+        return 0;
+    }
+    if (bpp != 24) {
+        printf("Bpp from %s is not 24: %u\n", filename, bpp);
+        return 0;
+    }
+    // seek past the rest of the bitmap header.
+    fseek(file, 24, SEEK_CUR);
+    // read the data.
+    image->data = (char *) malloc(size);
+    if (image->data == NULL) {
+        printf("Error allocating memory for color-corrected image data");
+        return 0;
+    }
+    if ((i = fread(image->data, size, 1, file)) != 1) {
+        printf("Error reading image data from %s.\n", filename);
+        return 0;
+    }
+    for (i=0;i<size;i+=3) { // reverse all of the colors. (bgr -> rgb)
+        temp = image->data[i];
+        image->data[i] = image->data[i+2];
+        image->data[i+2] = temp;
+    }
+    // we're done.
+    return 1;
+}
+
+//***Texture Image***//
+Image * loadTexture(){
+    Image *image1;
+    // allocate space for texture
+    image1 = (Image *) malloc(sizeof(Image));
+    if (image1 == NULL) {
+        printf("Error allocating space for image");
+        exit(0);
+    }
+    if (!ImageLoad("floor.bmp", image1)) {
+        exit(1);
+    }
+    return image1;
+}
+//*********************TREEEEEEEEEEEEEEEEEEEEEEEEEEE**************************//
 GLuint makeaTree;
 //float x,y,z;
 
@@ -125,15 +252,61 @@ if (height >1){
 }
 }
 }
+//****************************************************************************//
+
 
 void init(void)
 {
  glClearColor (0.0, 0.0, 0.0, 0.0);
  glShadeModel (GL_FLAT);
+ 
  glEnable (GL_DEPTH_TEST);  //turn on depth(z-axis) buffer
+ //glEnable( GL_TEXTURE_2D );
+    glDepthFunc(GL_LESS);
+//	Image *image2 = loadTexture2();
+    Image *image1 = loadTexture();
+    if(image1 == NULL){
+        printf("Image was not returned from loadTexture\n");
+        exit(0);
+    }
+    makeCheckImage();
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    // Create Texture
+    glGenTextures(2, texture);
+    
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); //scale linearly when image bigger than texture
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); //scale linearly when image smalled than texture
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, image1->sizeX, image1->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, image1->data);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+/*    glBindTexture(GL_TEXTURE_2D, textureiii[3]);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); //scale linearly when image bigger than texture
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); //scale linearly when image smalled than texture
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, image2->sizeX, image2->sizeY, 0,
+    GL_RGB, GL_UNSIGNED_BYTE, image2->data);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); */
+    
+	
+	glBindTexture(GL_TEXTURE_2D, texture[1]);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, checkImageWidth,
+
+    checkImageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE,&checkImage[0][0][0]);
+
+    glEnable(GL_TEXTURE_2D);
+    glShadeModel(GL_FLAT);
+
+ //*********************************************************//
   makeaTree=glGenLists(1);
  glNewList(makeaTree, GL_COMPILE);
  makeTree2(3,0.2);
+ //*********************************************************//
+ 
  glEndList(); 
 }
 /*
@@ -180,7 +353,7 @@ void show_label(GLfloat x, GLfloat y, char *format,...)
     glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, *p);
   glPopMatrix();
 }
-
+//********************* MAIN DISPLAY ********************************//
 void display(void)
 {
  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -199,11 +372,13 @@ drawLines();
 
 //Lawn
  glPushMatrix();
+ 
  glRotatef(90,1.0,0.0,0.0);
  glTranslatef(0.0,0.0,5.0);
  glScalef(160.0,160.0,0.0);
- glColor3f(0.0,0.7,0.0);
- myquad();
+ mytexturequad();
+ //glColor3f(0.0,0.7,0.0);
+// myquad();
  glPopMatrix();
 	 
 //Bottom front brown wall  	
