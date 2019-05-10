@@ -4,6 +4,7 @@ buildingOne() {
  glPushMatrix();
  glTranslatef(-40.0,-4.0,45.0);
  glScalef(5,7,4);
+ glColor3f(0.0,0.0,0.0);
  drawCube();
  glPopMatrix();
  
